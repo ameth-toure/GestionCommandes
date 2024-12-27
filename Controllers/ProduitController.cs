@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using GestionCommandes.Models;
 using GestionCommandes.Services;
-using System.Threading.Tasks;
+using GestionCommandes.Models;
 
 namespace GestionCommandes.Controllers
 {
@@ -14,9 +13,9 @@ namespace GestionCommandes.Controllers
             _produitService = produitService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var produits = await _produitService.GetAllProduitsAsync();
+            var produits = _produitService.GetAllProduits();
             return View(produits);
         }
 
@@ -26,10 +25,14 @@ namespace GestionCommandes.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Produit produit)
+        public IActionResult Create(Produit produit)
         {
-            await _produitService.AddProduitAsync(produit);
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                _produitService.AddProduit(produit);
+                return RedirectToAction("Index");
+            }
+            return View(produit);
         }
     }
 }

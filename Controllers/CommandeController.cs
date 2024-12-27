@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using GestionCommandes.Models;
 using GestionCommandes.Services;
-using System.Threading.Tasks;
+using GestionCommandes.Models;
 
 namespace GestionCommandes.Controllers
 {
@@ -14,9 +13,9 @@ namespace GestionCommandes.Controllers
             _commandeService = commandeService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var commandes = await _commandeService.GetAllCommandesAsync();
+            var commandes = _commandeService.GetAllCommandes();
             return View(commandes);
         }
 
@@ -26,10 +25,14 @@ namespace GestionCommandes.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Commande commande)
+        public IActionResult Create(Commande commande)
         {
-            await _commandeService.AddCommandeAsync(commande);
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                _commandeService.AddCommande(commande);
+                return RedirectToAction("Index");
+            }
+            return View(commande);
         }
     }
 }

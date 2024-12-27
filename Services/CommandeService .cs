@@ -1,7 +1,5 @@
 using GestionCommandes.Models;
 using GestionCommandes.Repositories;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GestionCommandes.Services
 {
@@ -14,14 +12,14 @@ namespace GestionCommandes.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Commande>> GetAllCommandesAsync()
+        public IEnumerable<Commande> GetAllCommandes()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAll();
         }
 
-        public async Task AddCommandeAsync(Commande commande)
+        public void AddCommande(Commande commande)
         {
-            await _repository.AddAsync(commande);
+            _repository.Add(commande);
         }
     }
 }

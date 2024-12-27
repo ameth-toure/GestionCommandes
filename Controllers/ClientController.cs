@@ -1,7 +1,8 @@
+ClientController.cs:
+```csharp
 using Microsoft.AspNetCore.Mvc;
-using GestionCommandes.Models;
 using GestionCommandes.Services;
-using System.Threading.Tasks;
+using GestionCommandes.Models;
 
 namespace GestionCommandes.Controllers
 {
@@ -14,9 +15,9 @@ namespace GestionCommandes.Controllers
             _clientService = clientService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var clients = await _clientService.GetAllClientsAsync();
+            var clients = _clientService.GetAllClients();
             return View(clients);
         }
 
@@ -26,10 +27,14 @@ namespace GestionCommandes.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Client client)
+        public IActionResult Create(Client client)
         {
-            await _clientService.AddClientAsync(client);
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                _clientService.AddClient(client);
+                return RedirectToAction("Index");
+            }
+            return View(client);
         }
     }
 }
